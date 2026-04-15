@@ -7,7 +7,22 @@ public final class CardioWorkout implements Workout {
     private final int difficulty;
 
     public CardioWorkout(String name, int duration, int caloriesBurned, int difficulty) {
-        if () {}
+        if (name.isBlank()) {
+            throw new InvalidWorkoutException("Workout name can't be empty");
+        }
+
+        if (duration <= 0) {
+            throw new InvalidWorkoutException("Workout duration must be a positive number (>0)");
+        }
+
+        if (caloriesBurned <= 0) {
+            throw new InvalidWorkoutException("Calories burned must be a positive number (>0)");
+        }
+
+        if (difficulty < 1 || difficulty > 5) {
+            throw new InvalidWorkoutException("Workout difficulty can't be less than 1 or higher than 5!");
+        }
+
         this.name = name;
         this.duration = duration;
         this.caloriesBurned = caloriesBurned;
