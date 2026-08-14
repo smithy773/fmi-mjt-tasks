@@ -3,10 +3,21 @@ package bg.sofia.uni.fmi.mjt.fittrack.workout.filter;
 import bg.sofia.uni.fmi.mjt.fittrack.workout.Workout;
 
 public class CaloriesWorkoutFilter implements WorkoutFilter {
-    public int min;
-    public int max;
+    private final int min;
+    private final int max;
+
+    private void validateMinMax(int min, int max) {
+        if (min > max) {
+            throw new IllegalArgumentException("Min can't be greater than max!");
+        }
+
+        if (min < 0 || max < 0) {
+            throw new IllegalArgumentException("Min and max can't be less than 0!");
+        }
+    }
 
     public CaloriesWorkoutFilter (int min, int max) {
+        validateMinMax(min, max);
         this.min = min;
         this.max = max;
     }
@@ -19,6 +30,6 @@ public class CaloriesWorkoutFilter implements WorkoutFilter {
      */
     @Override
     public boolean matches(Workout workout) {
-        return false;
+        return workout.getCaloriesBurned() >= this.min && workout.getCaloriesBurned() <= this.max;
     }
 }

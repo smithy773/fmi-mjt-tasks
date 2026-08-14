@@ -4,7 +4,7 @@ import bg.sofia.uni.fmi.mjt.fittrack.exception.InvalidWorkoutException;
 
 import java.util.Objects;
 
-public final class CardioWorkout implements Workout {
+public final class StrengthWorkout implements Workout {
     private static final WorkoutType WORKOUT_TYPE;
 
     private static final int MIN_DIFFICULTY = 1;
@@ -16,7 +16,7 @@ public final class CardioWorkout implements Workout {
     private final int difficulty;
 
     static {
-        WORKOUT_TYPE = WorkoutType.CARDIO;
+        WORKOUT_TYPE = WorkoutType.STRENGTH;
     }
 
     private static void validateParams(String name, int duration, int caloriesBurned, int difficulty) {
@@ -37,14 +37,13 @@ public final class CardioWorkout implements Workout {
         }
     }
 
-    public CardioWorkout(String name, int duration, int caloriesBurned, int difficulty) {
+    public StrengthWorkout(String name, int duration, int caloriesBurned, int difficulty) {
         validateParams(name, duration, caloriesBurned, difficulty);
         this.name = name;
         this.duration = duration;
         this.caloriesBurned = caloriesBurned;
         this.difficulty = difficulty;
     }
-
     /**
      * Returns the name of the workout.
      *
@@ -116,7 +115,7 @@ public final class CardioWorkout implements Workout {
 
     @Override
     public String toString() {
-        return "CardioWorkout{" +
+        return "StrengthWorkout{" +
                 "name= " + name + '\'' +
                 ", duration=" + duration + '\'' +
                 ", caloriesBurned=" + caloriesBurned + '\'' +

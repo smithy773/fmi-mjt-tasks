@@ -3,10 +3,20 @@ package bg.sofia.uni.fmi.mjt.fittrack.workout.filter;
 import bg.sofia.uni.fmi.mjt.fittrack.workout.Workout;
 import bg.sofia.uni.fmi.mjt.fittrack.workout.WorkoutType;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class TypeWorkoutFilter implements WorkoutFilter {
-    public WorkoutType type;
+    private final WorkoutType type;
+
+    private void validateType(WorkoutType type) {
+        if (type == null) {
+            throw new IllegalArgumentException("Workout type can't be empty / null!");
+        }
+    }
 
     public TypeWorkoutFilter (WorkoutType type) {
+        validateType(type);
         this.type = type;
     }
 
@@ -18,6 +28,6 @@ public class TypeWorkoutFilter implements WorkoutFilter {
      */
     @Override
     public boolean matches(Workout workout) {
-        return false;
+        return workout.getType() == this.type;
     }
 }

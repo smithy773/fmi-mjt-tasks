@@ -5,11 +5,26 @@ import bg.sofia.uni.fmi.mjt.fittrack.workout.Workout;
 import bg.sofia.uni.fmi.mjt.fittrack.workout.WorkoutType;
 import bg.sofia.uni.fmi.mjt.fittrack.workout.filter.WorkoutFilter;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class FitPlanner implements FitPlannerAPI {
+    private final Collection<Workout> workouts;
+
+    private void validateWorkouts(Collection<Workout> workouts) {
+        if (workouts == null) {
+            throw new IllegalArgumentException("Provided workouts are null");
+        }
+    }
+
+    public FitPlanner(Collection<Workout> availableWorkouts) {
+        validateWorkouts(availableWorkouts);
+        this.workouts = availableWorkouts;
+    }
+
+    public Collection<Workout> getWorkouts() {
+        return this.workouts;
+    }
+
     /**
      * Returns a list of workouts that match all provided filters.
      *
@@ -19,6 +34,23 @@ public class FitPlanner implements FitPlannerAPI {
      */
     @Override
     public List<Workout> findWorkoutsByFilters(List<WorkoutFilter> filters) {
+        // return an empty list if workouts is empty
+        if (this.workouts.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // otdolu e purvonachalno prazen list, koito ne znam kakuv list trqbva da e - moje da e linkedlist, moje i arraylist nz - koeto e po-burzo
+        List<Workout> result;
+
+        // loop through workouts (if (workout.next()) {
+        //      workout.val (ili kakvoto e)
+        //      boolean passesFilter = true;
+        //              workout.val go loopvame za vseki workout filter
+        //              ako ne passne filter, setvame passesFilter na false
+        //      ako passesFilter e false, continue
+        //      ako passesFilter e true, slagame workout.val v result
+        // }
+        // kato vsichko tova mine - return result
         return List.of();
     }
 
@@ -34,6 +66,11 @@ public class FitPlanner implements FitPlannerAPI {
      */
     @Override
     public List<Workout> generateOptimalWeeklyPlan(int totalMinutes) throws OptimalPlanImpossibleException {
+        // return an empty list if workouts is empty
+        if (this.workouts.isEmpty()) {
+            return Collections.emptyList();
+        }
+        // za tuk mi trqbva 0/1 knapsack algorithm, koito nz kak shte stane
         return List.of();
     }
 
@@ -44,6 +81,16 @@ public class FitPlanner implements FitPlannerAPI {
      */
     @Override
     public Map<WorkoutType, List<Workout>> getWorkoutsGroupedByType() {
+        // return an empty map if workouts is empty
+        if (this.workouts.isEmpty()) {
+            return Collections.emptyMap();
+        }
+        // suzdavam Map s key workouttype i zad vseki key stoi list ot workout elementi
+        // loopvam workouts {
+        //      ako v map-a veche ima takuv workout type key -> kum negoviq list dobavqme tozi workout
+        //      ako v map-a nqma takuv workout type key -> dobavqme toq key + dobavqme kum negoviq list toq workout
+        // }
+        // sled obhojdaneto vrushtame suzdadeniq map
         return Map.of();
     }
 
@@ -54,6 +101,11 @@ public class FitPlanner implements FitPlannerAPI {
      */
     @Override
     public List<Workout> getWorkoutsSortedByCalories() {
+        // return an empty list if workouts is empty
+        if (this.workouts.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         return List.of();
     }
 
@@ -64,6 +116,11 @@ public class FitPlanner implements FitPlannerAPI {
      */
     @Override
     public List<Workout> getWorkoutsSortedByDifficulty() {
+        // return an empty list if workouts is empty
+        if (this.workouts.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         return List.of();
     }
 
@@ -74,6 +131,11 @@ public class FitPlanner implements FitPlannerAPI {
      */
     @Override
     public Set<Workout> getUnmodifiableWorkoutSet() {
+        // return an empty set if workouts is empty
+        if (this.workouts.isEmpty()) {
+            return Collections.emptySet();
+        }
+
         return Set.of();
     }
 }

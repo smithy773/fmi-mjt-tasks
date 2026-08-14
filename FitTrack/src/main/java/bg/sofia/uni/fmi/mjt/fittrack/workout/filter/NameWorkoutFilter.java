@@ -3,10 +3,17 @@ package bg.sofia.uni.fmi.mjt.fittrack.workout.filter;
 import bg.sofia.uni.fmi.mjt.fittrack.workout.Workout;
 
 public class NameWorkoutFilter implements WorkoutFilter {
-    private String keyword;
-    private boolean caseSensitive;
+    private final String keyword;
+    private final boolean caseSensitive;
+
+    private void validateKeyword(String keyword) {
+        if (keyword == null || keyword.isBlank()) {
+            throw new IllegalArgumentException("Filter keyword can't be empty / null!");
+        }
+    }
 
     public NameWorkoutFilter(String keyword, boolean caseSensitive) {
+        validateKeyword(keyword);
         this.keyword = keyword;
         this.caseSensitive = caseSensitive;
     }
@@ -19,6 +26,10 @@ public class NameWorkoutFilter implements WorkoutFilter {
      */
     @Override
     public boolean matches(Workout workout) {
-        return false;
+        if (caseSensitive) {
+            return workout.getName().contains(keyword);
+        } else {
+            return workout.getName().toUpperCase().contains(keyword.toUpperCase());
+        }
     }
 }
