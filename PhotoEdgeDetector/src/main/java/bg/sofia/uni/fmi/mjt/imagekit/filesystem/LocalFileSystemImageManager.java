@@ -1,7 +1,6 @@
 package bg.sofia.uni.fmi.mjt.imagekit.filesystem;
 
 import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -26,15 +25,13 @@ public class LocalFileSystemImageManager implements FileSystemImageManager {
             throw new IllegalArgumentException("Can't load image - passed imageFile is null!");
         }
 
-        try (ImageInputStream imgInStream = ImageIO.createImageInputStream(imageFile)) {
-            BufferedImage bi = ImageIO.read(imgInStream);
+        BufferedImage bi = ImageIO.read(imageFile);
 
-            if (bi == null) {
-                throw new IOException("Image file does not exist, is not a regular file or is not in a supported format!");
-            }
-
-            return bi;
+        if (bi == null) {
+            throw new IOException("Image file does not exist, is not a regular file or is not in a supported format!");
         }
+
+        return bi;
     }
 
     /**
