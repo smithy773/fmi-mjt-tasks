@@ -48,6 +48,10 @@ public class LocalFileSystemImageManager implements FileSystemImageManager {
             throw new IllegalArgumentException("Can't load images from directory - passed imagesDirectory is null!");
         }
 
+        if (!imagesDirectory.isDirectory()) {
+            throw new IOException("Can't load images - given directory is not a directory!");
+        }
+
         try (DirectoryStream<Path> imgFileStream = Files.newDirectoryStream(imagesDirectory.toPath())) {
 
             List<BufferedImage> result = new ArrayList<>();
@@ -76,6 +80,16 @@ public class LocalFileSystemImageManager implements FileSystemImageManager {
 
         if (imageFile == null) {
             throw new IllegalArgumentException("Can't save image - passed imageFile is null!");
+        }
+
+        if (imageFile.exists()) {
+            throw new IOException("Can't save image - passed file to save image to already exists!");
+        }
+
+        File parentDir = imageFile.getParentFile();
+
+        if (parentDir == null || !parentDir.isDirectory()) {
+            throw new IOException("Can't save image - parent directory does not exist / is not a directory!");
         }
 
         String fileName = imageFile.getName();
