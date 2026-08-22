@@ -24,40 +24,53 @@ public class SobelEdgeDetectionTest {
 
     @Test
     void processThrowsIllArgExcWhenImageNull() {
-        assertThrows(IllegalArgumentException.class, () -> detection.process(null), "");
+        assertThrows(IllegalArgumentException.class, () -> detection.process(null), "Expected IllegalArgumentException when image is null");
     }
 
     @Test
     void processReturnsImgOfCorrectType() {
         BufferedImage result = detection.process(kittenBI);
 
-        assertEquals(BufferedImage.TYPE_INT_RGB, result.getType());
+        assertEquals(BufferedImage.TYPE_INT_RGB, result.getType(), "Expected returned image to be of type TYPE_INT_RGB");
     }
 
     @Test
     void processReturnsNewImg() {
-        assertNotSame(kittenBI, detection.process(kittenBI));
+        assertNotSame(kittenBI, detection.process(kittenBI), "Expected returned image to be a new/separate BufferedImage object");
     }
 
     @Test
     void processReturnsCorrectlyProcessedImage() {
-        BufferedImage newImg = new BufferedImage(2, 2, BufferedImage.TYPE_INT_RGB);
+        BufferedImage newImg = new BufferedImage(3, 3, BufferedImage.TYPE_INT_RGB);
 
-        newImg.setRGB(0, 0, new Color(30, 30, 30).getRGB());
-        newImg.setRGB(1, 0, new Color(150, 150, 150).getRGB());
-        newImg.setRGB(0, 1, new Color(100, 100, 100).getRGB());
-        newImg.setRGB(1, 1, new Color(60, 60, 60).getRGB());
+        newImg.setRGB(0, 0, new Color(1, 1, 1).getRGB());
+        newImg.setRGB(1, 0, new Color(1, 1, 1).getRGB());
+        newImg.setRGB(2, 0, new Color(100, 100, 100).getRGB());
+
+        newImg.setRGB(0, 1, new Color(1, 1, 1).getRGB());
+        newImg.setRGB(1, 1, new Color(100, 100, 100).getRGB());
+        newImg.setRGB(2, 1, new Color(150, 150, 150).getRGB());
+
+        newImg.setRGB(0, 2, new Color(100, 100, 100).getRGB());
+        newImg.setRGB(1, 2, new Color(150, 150, 150).getRGB());
+        newImg.setRGB(2, 2, new Color(150, 150, 150).getRGB());
 
         BufferedImage processed = detection.process(newImg);
 
-        BufferedImage manuallyProcessed = new BufferedImage(2, 2, BufferedImage.TYPE_INT_RGB);
+        BufferedImage manuallyProcessed = new BufferedImage(3, 3, BufferedImage.TYPE_INT_RGB);
 
-        int val = (255 << 16) | (255 << 8) | 255;
+        manuallyProcessed.setRGB(0, 0, (144 << 16) | (144 << 8) | 144);
+        manuallyProcessed.setRGB(1, 0, (255 << 16) | (255 << 8) | 255);
+        manuallyProcessed.setRGB(2, 0, (255 << 16) | (255 << 8) | 255);
 
-        manuallyProcessed.setRGB(0, 0, val);
-        manuallyProcessed.setRGB(1, 0, val);
-        manuallyProcessed.setRGB(0, 1, val);
-        manuallyProcessed.setRGB(1, 1, val);
+        manuallyProcessed.setRGB(0, 1, (255 << 16) | (255 << 8) | 255);
+        manuallyProcessed.setRGB(1, 1, (255 << 16) | (255 << 8) | 255);
+        manuallyProcessed.setRGB(2, 1, (255 << 16) | (255 << 8) | 255);
+
+        manuallyProcessed.setRGB(0, 2, (255 << 16) | (255 << 8) | 255);
+        manuallyProcessed.setRGB(1, 2, (255 << 16) | (255 << 8) | 255);
+        manuallyProcessed.setRGB(2, 2, (255 << 16) | (255 << 8) | 255);
+
 
         assertEquals(processed.getHeight(), manuallyProcessed.getHeight());
         assertEquals(processed.getWidth(), manuallyProcessed.getWidth());
