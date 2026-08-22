@@ -1,7 +1,29 @@
 package bg.sofia.uni.fmi.mjt.imagekit;
 
-public class Main {
-    static void main() {
+import bg.sofia.uni.fmi.mjt.imagekit.algorithm.ImageAlgorithm;
+import bg.sofia.uni.fmi.mjt.imagekit.algorithm.detection.SobelEdgeDetection;
+import bg.sofia.uni.fmi.mjt.imagekit.algorithm.grayscale.LuminosityGrayscale;
+import bg.sofia.uni.fmi.mjt.imagekit.filesystem.FileSystemImageManager;
+import bg.sofia.uni.fmi.mjt.imagekit.filesystem.LocalFileSystemImageManager;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+public class Main {
+    static void main() throws IOException {
+
+        FileSystemImageManager fsImageManager = new LocalFileSystemImageManager();
+
+        BufferedImage image = fsImageManager.loadImage(new File("src/test/resources/validfolder/kitten.png"));
+
+        ImageAlgorithm grayscaleAlgorithm = new LuminosityGrayscale();
+        BufferedImage grayscaleImage = grayscaleAlgorithm.process(image);
+
+        ImageAlgorithm sobelEdgeDetection = new SobelEdgeDetection(grayscaleAlgorithm);
+        BufferedImage edgeDetectedImage = sobelEdgeDetection.process(image);
+
+        fsImageManager.saveImage(grayscaleImage, new File("src/test/resources/validfolder/kitten-grayscale.png"));
+        fsImageManager.saveImage(edgeDetectedImage, new File("src/test/resources/validfolder/kitten-edge-detected.png"));
     }
 }
