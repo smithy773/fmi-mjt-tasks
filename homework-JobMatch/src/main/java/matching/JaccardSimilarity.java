@@ -2,6 +2,7 @@ package matching;
 
 import model.entity.Skill;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class JaccardSimilarity implements SimilarityStrategy {
@@ -15,6 +16,40 @@ public class JaccardSimilarity implements SimilarityStrategy {
      */
     @Override
     public double calculateSimilarity(Set<Skill> candidateSkills, Set<Skill> jobSkills) {
-        return 0;
+        if (candidateSkills == null) {
+            throw new IllegalArgumentException("Can't calculate similarity score - candidateSkills is null!");
+        }
+
+        if (jobSkills == null) {
+            throw new IllegalArgumentException("Can't calculate similarity score - jobSkills is null!");
+        }
+
+        HashSet<String> jobSkillNames = new HashSet<>();
+        HashSet<String> candidateSkillNames = new HashSet<>();
+
+        for (Skill jobSkill : jobSkills) {
+            jobSkillNames.add(jobSkill.name());
+        }
+
+        for (Skill candidateSkill : candidateSkills) {
+            candidateSkillNames.add(candidateSkill.name());
+        }
+
+        Set<String> skillIntersection = new HashSet<>(jobSkillNames);
+
+        skillIntersection.retainAll(candidateSkillNames);
+
+        Set<String> skillUnion = new HashSet<>(jobSkillNames);
+
+        skillUnion.addAll(candidateSkillNames);
+
+        int intersectionVal = skillIntersection.size();
+        int unionVal = skillUnion.size();;
+
+        if (intersectionVal == 0 && unionVal == 0) {
+            return 0;
+        }
+
+        return (double) intersectionVal / unionVal;
     }
 }

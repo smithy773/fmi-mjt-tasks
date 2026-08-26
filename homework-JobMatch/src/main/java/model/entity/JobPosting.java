@@ -55,5 +55,7 @@ public class JobPosting {
         }
     }
 
-
+    public String getEmployerEmail() {
+        return this.employerEmail;
+    }
 }

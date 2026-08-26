@@ -9,8 +9,14 @@ import model.entity.JobPosting;
 
 
 import java.util.List;
+import java.util.Map;
 
 public class JobMatch implements JobMatchAPI {
+    private Map<String, Candidate> candidateLog;
+    private Map<String, Employer> employerLog;
+    private Map<String, JobPosting> jobPostingLog;
+
+
     /**
      * Registers a new candidate in the system.
      *
@@ -21,7 +27,17 @@ public class JobMatch implements JobMatchAPI {
      */
     @Override
     public Candidate registerCandidate(Candidate candidate) {
-        return null;
+        if (candidate == null) {
+            throw new IllegalArgumentException("Can't register candidate - candidate is null!");
+        }
+
+        if (candidateLog.containsKey(candidate.getEmail())) {
+            throw new UserAlreadyExistsException("Can't register candidate - candidate with the same email address already exists!");
+        }
+
+        candidateLog.put(candidate.getEmail(), candidate);
+
+        return candidate;
     }
 
     /**
@@ -34,7 +50,17 @@ public class JobMatch implements JobMatchAPI {
      */
     @Override
     public Employer registerEmployer(Employer employer) {
-        return null;
+        if (employer == null) {
+            throw new IllegalArgumentException("Can't register employer - employer is null!");
+        }
+
+        if (employerLog.containsKey(employer.email())) {
+            throw new UserAlreadyExistsException("Can't register employer - employer with the same email address already exists!");
+        }
+
+        employerLog.put(employer.email(), employer);
+
+        return employer;
     }
 
     /**
@@ -47,7 +73,17 @@ public class JobMatch implements JobMatchAPI {
      */
     @Override
     public JobPosting postJobPosting(JobPosting jobPosting) {
-        return null;
+        if (jobPosting == null) {
+            throw new IllegalArgumentException("Can't register jobPosting - jobPosting is null!");
+        }
+
+        if (!employerLog.containsKey(jobPosting.getEmployerEmail())) {
+            throw new UserNotFoundException("Can't register jobPosting - employer with that email address doesn't exists!");
+        }
+
+        jobPostingLog.put(jobPosting.getEmployerEmail(), jobPosting);
+
+        return jobPosting;
     }
 
     /**
@@ -191,6 +227,8 @@ public class JobMatch implements JobMatchAPI {
      */
     @Override
     public PlatformStatistics getPlatformStatistics() {
+
+
         return null;
     }
 }

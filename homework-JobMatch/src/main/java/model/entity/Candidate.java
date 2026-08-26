@@ -52,4 +52,8 @@ public class Candidate {
             throw new IllegalArgumentException("Can't create candidate - " + education + " is invalid education");
         }
     }
+
+    public String getEmail() {
+        return this.email;
+    }
 }
