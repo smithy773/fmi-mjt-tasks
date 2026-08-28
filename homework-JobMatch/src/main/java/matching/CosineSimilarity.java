@@ -39,45 +39,33 @@ public class CosineSimilarity implements SimilarityStrategy {
 
         List<String> sortedUnion = skillUnion.stream().sorted(String::compareTo).toList();
 
-        List<Integer> candidateSkillVector = new ArrayList<>();
-        List<Integer> jobSkillVector = new ArrayList<>();
-
-        for (int i = 0; i < sortedUnion.size(); i++) {
-            String currSkill = sortedUnion.get(i);
-            int candidateSkillVal = 0;
-            int jobSkillVal = 0;
-
-            if (candidateSkillMap.containsKey(currSkill)) {
-                candidateSkillVal = candidateSkillMap.get(currSkill);
-            }
-
-            if (jobSkillMap.containsKey(currSkill)) {
-                jobSkillVal = jobSkillMap.get(currSkill);
-            }
-
-            candidateSkillVector.add(candidateSkillVal);
-            jobSkillVector.add(jobSkillVal);
-        }
-
         int dotProduct = 0;
         int ApowSum = 0;
         int BpowSum = 0;
 
-        for (int i = 0; i < sortedUnion.size(); i++) {
-            int candidateLevel = candidateSkillVector.get(i);
-            int jobLevel = jobSkillVector.get(i);
+        for (String currSkill : sortedUnion) {
+            int candidateSkillLevel = 0;
+            int jobSkillLevel = 0;
 
-            dotProduct += (candidateLevel * jobLevel);
+            if (candidateSkillMap.containsKey(currSkill)) {
+                candidateSkillLevel = candidateSkillMap.get(currSkill);
+            }
 
-            ApowSum += (int) Math.pow(candidateLevel, 2);
-            BpowSum += (int) Math.pow(jobLevel, 2);
+            if (jobSkillMap.containsKey(currSkill)) {
+                jobSkillLevel = jobSkillMap.get(currSkill);
+            }
+
+            dotProduct += candidateSkillLevel * jobSkillLevel;
+
+            ApowSum += candidateSkillLevel * candidateSkillLevel;
+            BpowSum += jobSkillLevel * jobSkillLevel;
         }
 
         double A = Math.sqrt(ApowSum);
         double B = Math.sqrt(BpowSum);
 
-        if (A == 0 && B == 0) {
-            return 0;
+        if (A == 0 || B == 0) {
+            return 0.0;
         }
 
         return dotProduct / (A * B);
