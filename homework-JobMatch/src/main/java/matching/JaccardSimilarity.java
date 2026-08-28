@@ -46,8 +46,8 @@ public class JaccardSimilarity implements SimilarityStrategy {
         int intersectionVal = skillIntersection.size();
         int unionVal = skillUnion.size();;
 
-        if (intersectionVal == 0 && unionVal == 0) {
-            return 0;
+        if (unionVal == 0) {
+            return 0.0;
         }
 
         return (double) intersectionVal / unionVal;
