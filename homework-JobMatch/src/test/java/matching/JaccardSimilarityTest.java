@@ -20,21 +20,16 @@ public class JaccardSimilarityTest {
     }
 
     @Test
-    void calculateSimilarityReturns0IfUnionVal0() {
-        Set<Skill> candidateSkills = Set.of();
-
-        Set<Skill> jobSkills = Set.of();
-
-        assertEquals(0.0, jaccard.calculateSimilarity(candidateSkills, jobSkills), "Expected 0.0 if UnionVal is 0 (meaning both skill sets are empty)");
-    }
-
-    @Test
-    void calculateSimilarityReturnsCorrectSimilarityScoreIfIntersectionVal0() {
+    void calculateSimilarityReturns0IfParameterSkillSetEmpty() {
         Set<Skill> candidateSkills = Set.of(new Skill("JavaScript", 1), new Skill("ReactJS", 2));
 
         Set<Skill> jobSkills = Set.of(new Skill("Java", 1), new Skill("Python", 2));
 
-        assertEquals(0.0, jaccard.calculateSimilarity(candidateSkills, jobSkills), "Expected 0.0 if intersectionVal is 0");
+        assertEquals(0.0, jaccard.calculateSimilarity(candidateSkills, Set.of()), "Expected calculateSimilarity to return 0 when jobSkills is empty");
+
+        assertEquals(0.0, jaccard.calculateSimilarity(Set.of(), jobSkills), "Expected calculateSimilarity to return 0 when candidateSkills is empty");
+
+        assertEquals(0.0, jaccard.calculateSimilarity(Set.of(), Set.of()), "Expected calculateSimilarity to return 0 when both parameters are empty");
     }
 
     @Test
@@ -50,8 +45,14 @@ public class JaccardSimilarityTest {
     void calculateSimilarityReturnsCorrectSimilarityScore() {
         Set<Skill> candidateSkills = Set.of(new Skill("Java", 1), new Skill("ReactJS", 2));
 
+        Set<Skill> candidateSkillsNoIntersect = Set.of(new Skill("JavaScript", 1), new Skill("ReactJS", 2));
+
         Set<Skill> jobSkills = Set.of(new Skill("Java", 1), new Skill("Python", 2));
 
+        Set<Skill> jobSkillsNoIntersect = Set.of(new Skill("Java", 1), new Skill("Python", 2));
+
         assertEquals((double) 1 / 3, jaccard.calculateSimilarity(candidateSkills, jobSkills), "Expected 0.33 (rounded) when intersectionVal is 1 and unionVal is 3");
+
+        assertEquals(0.0, jaccard.calculateSimilarity(candidateSkillsNoIntersect, jobSkillsNoIntersect), "Expected 0.0 if intersectionVal is 0");
     }
 }

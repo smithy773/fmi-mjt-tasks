@@ -6,7 +6,7 @@ import java.util.*;
 
 public class CosineSimilarity implements SimilarityStrategy {
     /**
-     * Calculates similarity score between two skill sets.
+     * Calculates similarity score between two skill sets. Also uses the levels of the required skills
      *
      * @param candidateSkills The skills possessed by a candidate
      * @param jobSkills       The skills required by a job
@@ -68,6 +68,6 @@ public class CosineSimilarity implements SimilarityStrategy {
             return 0.0;
         }
 
-        return dotProduct / (A * B);
+        return Math.round((dotProduct / (A * B)) * 100.00) / 100.00;
     }
 }
