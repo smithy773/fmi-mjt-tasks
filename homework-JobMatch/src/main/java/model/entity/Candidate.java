@@ -56,4 +56,10 @@ public class Candidate {
     public String getEmail() {
         return this.email;
     }
+
+    public Set<Skill> getSkills() {
+        return this.skills;
+    }
+
+    public String getName() {return this.name;}
 }

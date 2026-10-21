@@ -28,5 +28,7 @@ public class CandidateSimilarityMatch {
         if (!ValidationHelper.similarityScore(similarityScore)) {
             throw new IllegalArgumentException("Can't create CandidateSimilarityMatch - similarityScore is invalid!");
         }
+
+
     }
 }

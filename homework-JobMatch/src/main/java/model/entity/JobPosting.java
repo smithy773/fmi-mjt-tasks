@@ -58,4 +58,8 @@ public class JobPosting {
     public String getEmployerEmail() {
         return this.employerEmail;
     }
+
+    public Set<Skill> getRequiredSkills() {
+        return this.requiredSkills;
+    }
 }

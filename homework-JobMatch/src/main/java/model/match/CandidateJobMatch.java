@@ -30,4 +30,12 @@ public class CandidateJobMatch {
             throw new IllegalArgumentException("Can't create CandidateJobMatch - similarityScore is invalid!");
         }
     }
+
+    public double getSimilarityScore() {
+        return this.similarityScore;
+    }
+
+    public String getCandidateName() {
+        return this.candidate.getName();
+    }
 }

@@ -8,6 +8,8 @@ import model.entity.Employer;
 import model.entity.JobPosting;
 
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -107,7 +109,45 @@ public class JobMatch implements JobMatchAPI {
      */
     @Override
     public List<CandidateJobMatch> findTopNCandidatesForJob(String jobPostingId, int limit, SimilarityStrategy strategy) {
-        return List.of();
+        if (jobPostingId == null) {
+            throw new IllegalArgumentException("jobPostingId is null");
+        }
+
+        if (jobPostingId.isBlank()) {
+            throw new IllegalArgumentException("jobPostingId is blank or empty");
+        }
+
+        if (limit < 1) {
+            throw new IllegalArgumentException("limit is non-positive");
+        }
+
+        if (strategy == null) {
+            throw new IllegalArgumentException("strategy is null");
+        }
+
+        if (!jobPostingLog.containsKey(jobPostingId)) {
+            throw new JobPostingNotFoundException("No job posting with this ID exists");
+        }
+
+        JobPosting jobPosting = jobPostingLog.get(jobPostingId);
+
+        if (limit > candidateLog.size()) {
+            limit = candidateLog.size();
+        }
+
+        List<CandidateJobMatch> result = new ArrayList<>();
+
+        for (Candidate candidate : candidateLog.values()) {
+            double similarityScore = strategy.calculateSimilarity(candidate.getSkills(), jobPosting.getRequiredSkills());
+
+            CandidateJobMatch cjm = new CandidateJobMatch(candidate, jobPosting, similarityScore);
+
+            result.add(cjm);
+        }
+
+        result.sort(Comparator.comparing(CandidateJobMatch::getSimilarityScore).thenComparing(CandidateJobMatch::getCandidateName));
+
+        return result.subList(0, limit);
     }
 
     /**
@@ -227,6 +267,15 @@ public class JobMatch implements JobMatchAPI {
      */
     @Override
     public PlatformStatistics getPlatformStatistics() {
+        if (candidateLog == null || jobPostingLog == null) {
+            return null;
+        }
+
+        int totalCandidates = candidateLog.size();
+        int totalEmployers = employerLog.size();
+        int totalJobPostings = jobPostingLog.size();
+//        String mostCommonSkillName;
+//        String highestPaidJobTitle;
 
 
         return null;
