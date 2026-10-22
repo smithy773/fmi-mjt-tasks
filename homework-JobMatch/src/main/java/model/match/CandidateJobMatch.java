@@ -38,4 +38,7 @@ public class CandidateJobMatch {
     public String getCandidateName() {
         return this.candidate.getName();
     }
+
+    public String getJobTitle() {return this.jobPosting.getTitle();}
 }
+

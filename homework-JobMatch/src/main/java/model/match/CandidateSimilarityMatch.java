@@ -31,4 +31,8 @@ public class CandidateSimilarityMatch {
 
 
     }
+
+    public double getSimilarityScore() {return this.similarityScore;}
+
+    public String getSimilarCandidateName() {return this.similarCandidate.getName();}
 }

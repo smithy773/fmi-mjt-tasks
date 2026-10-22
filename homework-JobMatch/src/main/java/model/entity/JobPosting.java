@@ -62,4 +62,6 @@ public class JobPosting {
     public Set<Skill> getRequiredSkills() {
         return this.requiredSkills;
     }
+
+    public String getTitle() { return this.title;}
 }

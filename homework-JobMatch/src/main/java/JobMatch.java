@@ -138,11 +138,7 @@ public class JobMatch implements JobMatchAPI {
         List<CandidateJobMatch> result = new ArrayList<>();
 
         for (Candidate candidate : candidateLog.values()) {
-            double similarityScore = strategy.calculateSimilarity(candidate.getSkills(), jobPosting.getRequiredSkills());
-
-            CandidateJobMatch cjm = new CandidateJobMatch(candidate, jobPosting, similarityScore);
-
-            result.add(cjm);
+            populateResultForSimilarityMethod(result, strategy, candidate, jobPosting);
         }
 
         result.sort(Comparator.comparing(CandidateJobMatch::getSimilarityScore).thenComparing(CandidateJobMatch::getCandidateName));
@@ -171,7 +167,47 @@ public class JobMatch implements JobMatchAPI {
      */
     @Override
     public List<CandidateJobMatch> findTopNJobsForCandidate(String candidateEmail, int limit, SimilarityStrategy strategy) {
-        return List.of();
+        if (candidateEmail == null || candidateEmail.isBlank()) {
+            throw new IllegalArgumentException("candidateEmail is null or blank");
+        }
+
+        if (limit < 1) {
+            throw new IllegalArgumentException("limit is non-positive");
+        }
+
+        if (strategy == null) {
+            throw new IllegalArgumentException("strategy is null");
+        }
+
+        if (!candidateLog.containsKey(candidateEmail)) {
+            throw new CandidateNotFoundException("Candidate with email: " + candidateEmail + " does not exist");
+        }
+
+        Candidate candidate = candidateLog.get(candidateEmail);
+
+        if (limit > jobPostingLog.size()) {
+            limit = jobPostingLog.size();
+        }
+
+        List<CandidateJobMatch> result = new ArrayList<>();
+
+        for (JobPosting jobPosting : jobPostingLog.values()) {
+            populateResultForSimilarityMethod(result, strategy, candidate, jobPosting);
+        }
+
+        result.sort(Comparator.comparing(CandidateJobMatch::getSimilarityScore).thenComparing(CandidateJobMatch::getJobTitle));
+
+        return result.subList(0, limit);
+    }
+
+    private void populateResultForSimilarityMethod(List<CandidateJobMatch> result, SimilarityStrategy strategy, Candidate candidate, JobPosting jobPosting) {
+        double similarityScore = strategy.calculateSimilarity(candidate.getSkills(), jobPosting.getRequiredSkills());
+
+        if (similarityScore > 0.0) {
+            CandidateJobMatch cjm = new CandidateJobMatch(candidate, jobPosting, similarityScore);
+
+            result.add(cjm);
+        }
     }
 
     /**
@@ -196,7 +232,43 @@ public class JobMatch implements JobMatchAPI {
      */
     @Override
     public List<CandidateSimilarityMatch> findSimilarCandidates(String candidateEmail, int limit, SimilarityStrategy strategy) {
-        return List.of();
+        if (candidateEmail == null || candidateEmail.isBlank()) {
+            throw new IllegalArgumentException("candidateEmail is null or blank");
+        }
+
+        if (limit < 1) {
+            throw new IllegalArgumentException("limit is non-positive");
+        }
+
+        if (strategy == null) {
+            throw new IllegalArgumentException("strategy is null");
+        }
+
+        if (!candidateLog.containsKey(candidateEmail)) {
+            throw new CandidateNotFoundException("Candidate with email: " + candidateEmail + " does not exist");
+        }
+
+        Candidate targetCandidate = candidateLog.get(candidateEmail);
+
+        if (limit > candidateLog.size()) {
+            limit = candidateLog.size();
+        }
+
+        List<CandidateSimilarityMatch> result = new ArrayList<>();
+
+        for (Candidate similarCandidate : candidateLog.values()) {
+            double similarityScore = strategy.calculateSimilarity(targetCandidate.getSkills(), similarCandidate.getSkills());
+
+            if (similarityScore > 0.0) {
+                CandidateSimilarityMatch csm = new CandidateSimilarityMatch(targetCandidate, similarCandidate, similarityScore);
+
+                result.add(csm);
+            }
+        }
+
+        result.sort(Comparator.comparing(CandidateSimilarityMatch::getSimilarityScore).thenComparing(CandidateSimilarityMatch::getSimilarCandidateName));
+
+        return result.subList(0, limit);
     }
 
     /**
