@@ -1,5 +1,7 @@
 import api.JobMatchAPI;
 import exceptions.*;
+import matching.CosineSimilarity;
+import model.entity.Skill;
 import model.match.*;
 import matching.SimilarityStrategy;
 import model.PlatformStatistics;
@@ -8,10 +10,7 @@ import model.entity.Employer;
 import model.entity.JobPosting;
 
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class JobMatch implements JobMatchAPI {
     private Map<String, Candidate> candidateLog;
@@ -320,7 +319,87 @@ public class JobMatch implements JobMatchAPI {
      */
     @Override
     public List<SkillRecommendation> getSkillRecommendationsForCandidate(String candidateEmail, int limit) {
-        return List.of();
+        if (candidateEmail == null || candidateEmail.isBlank()) {
+            throw new IllegalArgumentException("candidateEmail is null, blank or empty");
+        }
+
+        if (!candidateLog.containsKey(candidateEmail)) {
+            throw new CandidateNotFoundException("Candidate with email: " + candidateEmail + " does not exist!");
+        }
+
+//        * 1. For each job posting, calculate current similarity score with the candidate
+//     * 2. For each skill the candidate is MISSING (present in job but not in candidate profile):
+//     * - Temporarily add that skill to candidate's profile with level equal to the max. required level across all job postings
+//     * - Recalculate similarity score
+//     * - Calculate improvement: new_score - old_score
+//     * 3. Aggregate (sum up) improvements across all job postings for each missing skill
+//     * 4. Return top N skills ranked by total improvement potential
+
+        SimilarityStrategy cosine = new CosineSimilarity();
+        Candidate candidate = candidateLog.get(candidateEmail);
+
+        Map<String, Integer> missingSkills = new HashMap<>();
+
+        for (JobPosting jobPosting : jobPostingLog.values()) {
+            Set<Skill> jobRequiredSkills = jobPosting.getRequiredSkills();
+
+            for (Skill requiredSkill : jobRequiredSkills) {
+                boolean isMissing = true;
+                String skillName = requiredSkill.name();;
+                Integer skillLevel = requiredSkill.level();;
+
+                for (Skill candidateSkill : candidate.getSkills()) {
+                    if (candidateSkill.name().equals(skillName)) {
+                        isMissing = false;
+                        break;
+                    }
+                }
+
+                if (isMissing
+                        && (!missingSkills.containsKey(skillName)
+                        || missingSkills.get(skillName) < requiredSkill.level())) {
+
+                        missingSkills.put(skillName, skillLevel);
+                }
+            }
+        }
+
+        Map<String, Double> improvements = new HashMap<>();
+
+        for (JobPosting jobPosting : jobPostingLog.values()) {
+
+            double initialSimilarityScore = cosine.calculateSimilarity(candidate.getSkills(), jobPosting.getRequiredSkills());
+
+            for (String missingSkillName : missingSkills.keySet()) {
+                Set<Skill> candidateSkills = new HashSet<>(candidate.getSkills());
+
+                candidateSkills.add(new Skill(missingSkillName, missingSkills.get(missingSkillName)));
+
+                double newSimilarityScore = cosine.calculateSimilarity(candidateSkills, jobPosting.getRequiredSkills());
+
+                double improvement = newSimilarityScore - initialSimilarityScore;
+
+                if (improvements.containsKey(missingSkillName)) {
+                    improvements.put(missingSkillName, (improvements.get(missingSkillName) + improvement));
+                } else {
+                    improvements.put(missingSkillName, improvement);
+                }
+            }
+        }
+
+        List<SkillRecommendation> result = new ArrayList<>();
+
+        for (String improvementKey : improvements.keySet()) {
+            SkillRecommendation skillRec = new SkillRecommendation(improvementKey, improvements.get(improvementKey));
+
+            result.add(skillRec);
+        }
+
+        result.sort(Comparator.comparing(
+                SkillRecommendation::improvementScore)
+                .thenComparing(SkillRecommendation::skillName));
+
+        return result.subList(0, limit);
     }
 
     /**
