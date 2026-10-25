@@ -6,12 +6,6 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="optimalnoRazpredelenie" />
-        <module name="nepovtarqshta-posledovatelnost_1" />
-        <module name="poorMansJenkins" />
-        <module name="FitTrack" />
-        <module name="ergenSim" />
-        <module name="BurnoutPreventionSystem" />
       </profile>
     </annotationProcessing>
   </component>

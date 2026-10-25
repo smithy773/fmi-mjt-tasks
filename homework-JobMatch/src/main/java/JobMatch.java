@@ -327,19 +327,12 @@ public class JobMatch implements JobMatchAPI {
             throw new CandidateNotFoundException("Candidate with email: " + candidateEmail + " does not exist!");
         }
 
-//        * 1. For each job posting, calculate current similarity score with the candidate
-//     * 2. For each skill the candidate is MISSING (present in job but not in candidate profile):
-//     * - Temporarily add that skill to candidate's profile with level equal to the max. required level across all job postings
-//     * - Recalculate similarity score
-//     * - Calculate improvement: new_score - old_score
-//     * 3. Aggregate (sum up) improvements across all job postings for each missing skill
-//     * 4. Return top N skills ranked by total improvement potential
-
         SimilarityStrategy cosine = new CosineSimilarity();
         Candidate candidate = candidateLog.get(candidateEmail);
 
         Map<String, Integer> missingSkills = new HashMap<>();
 
+//        Recording a map of missing skills
         for (JobPosting jobPosting : jobPostingLog.values()) {
             Set<Skill> jobRequiredSkills = jobPosting.getRequiredSkills();
 
@@ -355,6 +348,7 @@ public class JobMatch implements JobMatchAPI {
                     }
                 }
 
+//                Makes sure each skill is recorded with the highest available level
                 if (isMissing
                         && (!missingSkills.containsKey(skillName)
                         || missingSkills.get(skillName) < requiredSkill.level())) {
@@ -364,6 +358,14 @@ public class JobMatch implements JobMatchAPI {
             }
         }
 
+
+//     * 1. For each job posting, calculate current similarity score with the candidate
+//     * 2. For each skill the candidate is MISSING (present in job but not in candidate profile):
+//     * - Temporarily add that skill to candidate's profile with level equal to the max. required level across all job postings
+//     * - Recalculate similarity score
+//     * - Calculate improvement: new_score - old_score
+//     * 3. Aggregate (sum up) improvements across all job postings for each missing skill
+//     * 4. Return top N skills ranked by total improvement potential
         Map<String, Double> improvements = new HashMap<>();
 
         for (JobPosting jobPosting : jobPostingLog.values()) {
@@ -398,7 +400,6 @@ public class JobMatch implements JobMatchAPI {
         result.sort(Comparator.comparing(
                 SkillRecommendation::improvementScore)
                 .thenComparing(SkillRecommendation::skillName));
-
         return result.subList(0, limit);
     }
 
@@ -425,10 +426,42 @@ public class JobMatch implements JobMatchAPI {
         int totalCandidates = candidateLog.size();
         int totalEmployers = employerLog.size();
         int totalJobPostings = jobPostingLog.size();
-//        String mostCommonSkillName;
-//        String highestPaidJobTitle;
+        String mostCommonSkillName = "";
+        String highestPaidJobTitle = "";
 
+        Map<String, Integer> skillOccurences = new HashMap<>();
 
-        return null;
+        for (Candidate candidate : candidateLog.values()) {
+            for (Skill candidateSkill : candidate.getSkills()) {
+                String skillName = candidateSkill.name();
+
+                if (skillOccurences.containsKey(skillName)) {
+                    skillOccurences.put(skillName, skillOccurences.get(skillName) + 1);
+                } else {
+                    skillOccurences.put(skillName, 1);
+                }
+            }
+        }
+
+        List<Map.Entry<String, Integer>> sortedList = new ArrayList<>(skillOccurences.entrySet());
+
+        sortedList.sort(Comparator.comparing(Map.Entry<String, Integer>::getValue).reversed().thenComparing(Map.Entry::getKey));
+
+        mostCommonSkillName = sortedList.getFirst().getKey();
+
+        double highestPaidSalary = 0.0;
+
+        for (JobPosting jobPosting : jobPostingLog.values()) {
+            String currJobPostingTitle = jobPosting.getTitle();
+            double currJobPostingSalary = jobPosting.getSalary();
+
+            if (currJobPostingSalary > highestPaidSalary || (currJobPostingSalary == highestPaidSalary &&
+                    currJobPostingTitle.compareTo(highestPaidJobTitle) < 0)) {
+                highestPaidJobTitle = currJobPostingTitle;
+                highestPaidSalary = currJobPostingSalary;
+            }
+        }
+
+        return new PlatformStatistics(totalCandidates, totalEmployers, totalJobPostings, mostCommonSkillName, highestPaidJobTitle);
     }
 }
