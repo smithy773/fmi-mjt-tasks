@@ -13,9 +13,9 @@ import model.entity.JobPosting;
 import java.util.*;
 
 public class JobMatch implements JobMatchAPI {
-    private Map<String, Candidate> candidateLog;
-    private Map<String, Employer> employerLog;
-    private Map<String, JobPosting> jobPostingLog;
+    private final Map<String, Candidate> candidateLog = new HashMap<>();
+    private final Map<String, Employer> employerLog = new HashMap<>();
+    private final Map<String, JobPosting> jobPostingLog = new HashMap<>();
 
 
     /**
@@ -338,8 +338,8 @@ public class JobMatch implements JobMatchAPI {
 
             for (Skill requiredSkill : jobRequiredSkills) {
                 boolean isMissing = true;
-                String skillName = requiredSkill.name();;
-                Integer skillLevel = requiredSkill.level();;
+                String skillName = requiredSkill.name();
+                Integer skillLevel = requiredSkill.level();
 
                 for (Skill candidateSkill : candidate.getSkills()) {
                     if (candidateSkill.name().equals(skillName)) {
@@ -419,31 +419,27 @@ public class JobMatch implements JobMatchAPI {
      */
     @Override
     public PlatformStatistics getPlatformStatistics() {
-        if (candidateLog == null || jobPostingLog == null) {
-            return null;
-        }
-
         int totalCandidates = candidateLog.size();
         int totalEmployers = employerLog.size();
         int totalJobPostings = jobPostingLog.size();
-        String mostCommonSkillName = "";
+        String mostCommonSkillName;
         String highestPaidJobTitle = "";
 
-        Map<String, Integer> skillOccurences = new HashMap<>();
+        Map<String, Integer> skillOccurrences = new HashMap<>();
 
         for (Candidate candidate : candidateLog.values()) {
             for (Skill candidateSkill : candidate.getSkills()) {
                 String skillName = candidateSkill.name();
 
-                if (skillOccurences.containsKey(skillName)) {
-                    skillOccurences.put(skillName, skillOccurences.get(skillName) + 1);
+                if (skillOccurrences.containsKey(skillName)) {
+                    skillOccurrences.put(skillName, skillOccurrences.get(skillName) + 1);
                 } else {
-                    skillOccurences.put(skillName, 1);
+                    skillOccurrences.put(skillName, 1);
                 }
             }
         }
 
-        List<Map.Entry<String, Integer>> sortedList = new ArrayList<>(skillOccurences.entrySet());
+        List<Map.Entry<String, Integer>> sortedList = new ArrayList<>(skillOccurrences.entrySet());
 
         sortedList.sort(Comparator.comparing(Map.Entry<String, Integer>::getValue).reversed().thenComparing(Map.Entry::getKey));
 
