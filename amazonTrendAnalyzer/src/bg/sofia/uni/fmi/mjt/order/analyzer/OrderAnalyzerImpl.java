@@ -38,6 +38,12 @@ public class OrderAnalyzerImpl implements OrderAnalyzer {
      */
     @Override
     public List<Order> ordersByCustomer(String customer) {
+        if (customer == null || customer.isBlank()) {
+            throw new IllegalArgumentException("Customer is null or blank");
+        }
+
+
+
         return List.of();
     }
 
