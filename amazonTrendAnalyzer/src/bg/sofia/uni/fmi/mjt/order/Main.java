@@ -3,13 +3,13 @@ package bg.sofia.uni.fmi.mjt.order;
 import bg.sofia.uni.fmi.mjt.order.analyzer.OrderAnalyzerImpl;
 import bg.sofia.uni.fmi.mjt.order.loader.OrderLoader;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.Reader;
 
 public class Main {
-    public static void main(String[] args) throws FileNotFoundException {
-        String filePath = "amazon_sales_2025.csv";
+    public static void main(String[] args) throws IOException {
+        String filePath = "src/resources/amazon_sales_data_2025.csv";
 
         Reader reader = new FileReader(filePath);
 
