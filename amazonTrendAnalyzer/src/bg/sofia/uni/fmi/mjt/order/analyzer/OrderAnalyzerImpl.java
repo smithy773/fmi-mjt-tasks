@@ -131,16 +131,57 @@ public class OrderAnalyzerImpl implements OrderAnalyzer {
 
     @Override
     public Map<Category, PaymentMethod> mostUsedPaymentMethodForCategory() {
+
+
         return Map.of();
     }
 
     @Override
     public String locationWithMostOrders() {
-        return "";
+        Map<String, Integer> container = new HashMap<>();
+
+        orders.forEach(order -> {
+            String location = order.customerLocation();
+
+            if (container.containsKey(location)) {
+                container.put(location, container.get(location) + 1);
+            } else {
+                container.put(location, 1);
+            }
+        });
+
+        List<Map.Entry<String, Integer>> sorted = new ArrayList<>(container.entrySet());
+
+        sorted.sort(Comparator.comparing(
+                        Map.Entry<String, Integer>::getValue)
+                .reversed()
+                .thenComparing(Map.Entry::getKey));
+
+        return sorted.getFirst().getKey();
     }
 
     @Override
     public Map<Category, Map<Status, Long>> groupByCategoryAndStatus() {
-        return Map.of();
+        Map<Category, Map<Status, Long>> result = new HashMap<>();
+
+        orders.forEach(order -> {
+            Category category = order.category();
+            Status status = order.status();
+
+            if (result.containsKey(category)) {
+                Map<Status, Long> subMap = result.get(category);
+
+                if (subMap.containsKey(status)) {
+                    subMap.put(status, subMap.get(status) + 1);
+                } else {
+                    subMap.put(status, 1L);
+                }
+
+            } else {
+                result.put(category, new HashMap<>());
+            }
+        });
+
+        return result;
     }
 }
