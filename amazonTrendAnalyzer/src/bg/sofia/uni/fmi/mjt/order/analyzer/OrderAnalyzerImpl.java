@@ -84,12 +84,49 @@ public class OrderAnalyzerImpl implements OrderAnalyzer {
 
     @Override
     public Map<Category, Double> revenueByCategory() {
-        return Map.of();
+        Map<Category, Double> result = new HashMap<>();
+
+        orders.forEach((order) -> {
+            Category category = order.category();
+            Double totalSales = order.totalSales();
+
+            if (result.containsKey(category)) {
+                result.put(category, result.get(category) + totalSales);
+            } else {
+                result.put(category, totalSales);
+            }
+        });
+
+        return result;
     }
 
     @Override
     public Set<String> suspiciousCustomers() {
-        return Set.of();
+        Map<String, List<Order>> container = new HashMap<>();
+
+        orders.forEach((order) -> {
+            String customer = order.customerName();
+
+            if (order.status() == Status.CANCELLED &&
+            order.totalSales() < 100) {
+
+                if (!container.containsKey(customer)) {
+                    container.put(customer, new ArrayList<>());
+                }
+
+                container.get(customer).add(order);
+            }
+        });
+
+        Set<String> susCustomers = new HashSet<>();
+
+        container.forEach((customer, susOrders) -> {
+            if (susOrders.size() >= 3) {
+                susCustomers.add(customer);
+            }
+        });
+
+        return susCustomers;
     }
 
     @Override
