@@ -146,91 +146,132 @@ public class OrderAnalyzerImpl implements OrderAnalyzer {
 
     @Override
     public Map<Category, PaymentMethod> mostUsedPaymentMethodForCategory() {
-        Map<Category, Map<PaymentMethod, Integer>> container = new HashMap<>();
+//        Map<Category, Map<PaymentMethod, Integer>> container = new HashMap<>();
+//
+//        orders.forEach(order -> {
+//            Category category = order.category();
+//            PaymentMethod paymentMethod = order.paymentMethod();
+//
+//            if (container.containsKey(category)) {
+//                Map<PaymentMethod, Integer> subMap = container.get(category);
+//
+//                if (subMap.containsKey(paymentMethod)) {
+//                    subMap.put(paymentMethod, subMap.get(paymentMethod) + 1);
+//                } else {
+//                    subMap.put(paymentMethod, 1);
+//                }
+//
+//            } else {
+//                container.put(category, new HashMap<>());
+//                container.get(category).put(paymentMethod, 1);
+//            }
+//        });
 
-        orders.forEach(order -> {
-            Category category = order.category();
-            PaymentMethod paymentMethod = order.paymentMethod();
+        return orders.stream()
+                .collect(Collectors.groupingBy(
+                        Order::category,
+                        Collectors.collectingAndThen(
+                                Collectors.groupingBy(
+                                        Order::paymentMethod,
+                                        Collectors.counting()
+                                ),
+                                subMap -> subMap.entrySet().stream()
+                                        .max(Comparator.comparing(Map.Entry<PaymentMethod, Long>::getValue)
+                                                .thenComparing(entry -> entry.getKey().name(),
+                                                        Comparator.reverseOrder()
+                                                ))
+                                        .orElseThrow()
+                                        .getKey()
+                        )
+                ));
 
-            if (container.containsKey(category)) {
-                Map<PaymentMethod, Integer> subMap = container.get(category);
-
-                if (subMap.containsKey(paymentMethod)) {
-                    subMap.put(paymentMethod, subMap.get(paymentMethod) + 1);
-                } else {
-                    subMap.put(paymentMethod, 1);
-                }
-
-            } else {
-                container.put(category, new HashMap<>());
-                container.get(category).put(paymentMethod, 1);
-            }
-        });
-
-        Map<Category, PaymentMethod> result = new HashMap<>();
-
-        container.forEach((category, subMap) -> {
-            Optional<Map.Entry<PaymentMethod, Integer>> mostUsedPaymentMethodEntry = subMap.entrySet().stream()
-                    .max(Comparator.comparing(Map.Entry<PaymentMethod, Integer>::getValue).thenComparing(entry -> entry.getKey().name(), Comparator.reverseOrder()));
-
-           PaymentMethod mostUsedPaymentMethod = null;
-
-            if (mostUsedPaymentMethodEntry.isPresent()) {
-                mostUsedPaymentMethod = mostUsedPaymentMethodEntry.get().getKey();
-            }
-
-            result.put(category, mostUsedPaymentMethod);
-        });
-
-        return result;
+//        Map<Category, PaymentMethod> result = new HashMap<>();
+//
+//        container.forEach((category, subMap) -> {
+//            Optional<Map.Entry<PaymentMethod, Integer>> mostUsedPaymentMethodEntry = subMap.entrySet().stream()
+//                    .max(Comparator.comparing(Map.Entry<PaymentMethod, Integer>::getValue).thenComparing(entry -> entry.getKey().name(), Comparator.reverseOrder()));
+//
+//           PaymentMethod mostUsedPaymentMethod = null;
+//
+//            if (mostUsedPaymentMethodEntry.isPresent()) {
+//                mostUsedPaymentMethod = mostUsedPaymentMethodEntry.get().getKey();
+//            }
+//
+//            result.put(category, mostUsedPaymentMethod);
+//        });
+//
+//        return result;
     }
 
     @Override
     public String locationWithMostOrders() {
-        Map<String, Integer> container = new HashMap<>();
+//        Map<String, Integer> container = new HashMap<>();
+//
+//        orders.forEach(order -> {
+//            String location = order.customerLocation();
+//
+//            if (container.containsKey(location)) {
+//                container.put(location, container.get(location) + 1);
+//            } else {
+//                container.put(location, 1);
+//            }
+//        });
+//
+//
+//
+//        List<Map.Entry<String, Integer>> sorted = new ArrayList<>(container.entrySet());
+//
+//        sorted.sort(Comparator.comparing(
+//                Map.Entry<String, Integer>::getValue, Comparator.reverseOrder())
+//                .thenComparing(Map.Entry::getKey));
 
-        orders.forEach(order -> {
-            String location = order.customerLocation();
-
-            if (container.containsKey(location)) {
-                container.put(location, container.get(location) + 1);
-            } else {
-                container.put(location, 1);
-            }
-        });
-
-        List<Map.Entry<String, Integer>> sorted = new ArrayList<>(container.entrySet());
-
-        sorted.sort(Comparator.comparing(
-                Map.Entry<String, Integer>::getValue, Comparator.reverseOrder())
-                .thenComparing(Map.Entry::getKey));
-
-        return sorted.getFirst().getKey();
+        return orders.stream()
+                .collect(Collectors.groupingBy(
+                        Order::customerLocation,
+                        Collectors.counting()
+                ))
+                .entrySet()
+                .stream().max(Comparator.comparing(
+                                Map.Entry<String, Long>::getValue)
+                        .thenComparing(Map.Entry::getKey))
+                .map(Map.Entry::getKey)
+                .orElse(null);
     }
 
     @Override
     public Map<Category, Map<Status, Long>> groupByCategoryAndStatus() {
-        Map<Category, Map<Status, Long>> result = new HashMap<>();
+//        Map<Category, Map<Status, Long>> result = new HashMap<>();
+//
+//        orders.forEach(order -> {
+//            Category category = order.category();
+//            Status status = order.status();
+//
+//            if (result.containsKey(category)) {
+//                Map<Status, Long> subMap = result.get(category);
+//
+//                if (subMap.containsKey(status)) {
+//                    subMap.put(status, subMap.get(status) + 1);
+//                } else {
+//                    subMap.put(status, 1L);
+//                }
+//
+//            } else {
+//                result.put(category, new HashMap<>());
+//                result.get(category).put(status, 1L);
+//            }
+//        });
+//
+//        return result;
 
-        orders.forEach(order -> {
-            Category category = order.category();
-            Status status = order.status();
 
-            if (result.containsKey(category)) {
-                Map<Status, Long> subMap = result.get(category);
-
-                if (subMap.containsKey(status)) {
-                    subMap.put(status, subMap.get(status) + 1);
-                } else {
-                    subMap.put(status, 1L);
-                }
-
-            } else {
-                result.put(category, new HashMap<>());
-                result.get(category).put(status, 1L);
-            }
-        });
-
-        return result;
+        return orders.stream()
+                .collect(
+                        Collectors.groupingBy(
+                                Order::category,
+                                Collectors.groupingBy(
+                                        Order::status,
+                                        Collectors.counting()
+                                )
+                        ));
     }
 }
