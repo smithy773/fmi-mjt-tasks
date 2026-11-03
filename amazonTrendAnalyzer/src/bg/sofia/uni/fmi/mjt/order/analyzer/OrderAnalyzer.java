@@ -58,8 +58,7 @@ public interface OrderAnalyzer {
 
     /**
      * Computes the total revenue for each {@link Category} present in the dataset.
-     * Revenue is defined as the sum of {@link Order#totalSales()} for all orders
-     * in that category.
+     * Revenue is defined as the sum of {@link Order#totalSales()} for all orders in that category.
      *
      * @return a map from category to total revenue
      */

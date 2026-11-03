@@ -7,6 +7,7 @@ import bg.sofia.uni.fmi.mjt.order.domain.Status;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class OrderAnalyzerImpl implements OrderAnalyzer {
     private final List<Order> orders;
@@ -27,113 +28,161 @@ public class OrderAnalyzerImpl implements OrderAnalyzer {
             throw new IllegalArgumentException("Customer is null or blank");
         }
 
-        return orders.stream().filter((order) -> order.customerName().equals(customer)).toList();
+        return orders.stream().filter(
+                (order) -> order.customerName()
+                        .equals(customer))
+                .toList();
     }
 
     @Override
     public Map.Entry<LocalDate, Long> dateWithMostOrders() {
-        Map<LocalDate, Long> container = new HashMap<>();
+        if (orders.isEmpty()) {
+            return null;
+        }
 
-        orders.forEach((order) -> {
-            LocalDate orderDate = order.date();
+        Map<LocalDate, Long> container = orders.stream()
+                .collect(Collectors.groupingBy(
+                        Order::date,
+                        Collectors.counting()
+                ));
 
-            if (container.containsKey(orderDate)) {
-                container.put(orderDate, container.get(orderDate) + 1);
-            } else {
-                container.put(orderDate, 1L);
-            }
-        });
+//        Map<LocalDate, Long> container = new HashMap<>();
+//
+//        orders.forEach(order -> {
+//            container.merge(order.date(), 1L, Long::sum);
+//        });
 
-        List<Map.Entry<LocalDate, Long>> result = new ArrayList<>(container.entrySet());
-
-        result.sort(
-                Comparator.comparing(
-                        Map.Entry<LocalDate, Long>::getValue)
-                        .reversed()
-                        .thenComparing(Map.Entry::getKey));
-
-        return result.getFirst();
+        return container.entrySet().stream()
+                .max(Comparator.comparing(Map.Entry<LocalDate, Long>::getValue)
+                        .thenComparing(Map.Entry::getKey, Comparator.reverseOrder()))
+                .orElse(null);
     }
 
     @Override
     public List<String> topNMostOrderedProducts(int n) {
-        n = Math.min(n, orders.size());
+        if (n < 0) {
+            throw new IllegalArgumentException("n < 0");
+        }
 
-        Map<String, Integer> productOrders = new HashMap<>();
+        if (n == 0) {
+            return new ArrayList<>();
+        }
 
-        orders.forEach((order) -> {
-            String productName = order.product();
+//        Map<String, Integer> productOrders = new HashMap<>();
+//
+//        orders.forEach((order) -> {
+//            productOrders.merge(order.product(), 1, Integer::sum);
+//        });
 
-            if (productOrders.containsKey(productName)) {
-                productOrders.put(productName, productOrders.get(productName) + 1);
-            } else {
-                productOrders.put(productName, 1);
-            }
-        });
+        Map<String, Integer> productOrders = orders.stream()
+                .collect(Collectors.groupingBy(
+                        Order::product,
+                        Collectors.summingInt(order -> 1)
+                ));
 
-        List<Map.Entry<String, Integer>> sorted = new ArrayList<>(productOrders.entrySet());
+        n = Math.min(n, productOrders.size());
 
-        sorted.sort(
-                Comparator.comparing(
-                        Map.Entry<String, Integer>::getValue)
+        return productOrders.entrySet().stream()
+                .sorted(Comparator.comparing(
+                                Map.Entry<String, Integer>::getValue)
                         .reversed()
-                        .thenComparing(Map.Entry::getKey));
-
-        return sorted.stream().limit(n).map(Map.Entry::getKey).toList();
+                        .thenComparing(Map.Entry::getKey))
+                .limit(n)
+                .map(Map.Entry::getKey)
+                .toList();
     }
 
     @Override
     public Map<Category, Double> revenueByCategory() {
-        Map<Category, Double> result = new HashMap<>();
-
-        orders.forEach((order) -> {
-            Category category = order.category();
-            Double totalSales = order.totalSales();
-
-            if (result.containsKey(category)) {
-                result.put(category, result.get(category) + totalSales);
-            } else {
-                result.put(category, totalSales);
-            }
-        });
-
-        return result;
+        return orders.stream()
+                .collect(Collectors.groupingBy(
+                        Order::category,
+                        Collectors.summingDouble(Order::totalSales)
+                ));
     }
 
     @Override
     public Set<String> suspiciousCustomers() {
-        Map<String, List<Order>> container = new HashMap<>();
+//        Map<String, List<Order>> container = new HashMap<>();
+//
+//        orders.forEach((order) -> {
+//            String customer = order.customerName();
+//
+//            if (order.status() == Status.CANCELLED &&
+//            order.totalSales() < 100) {
+//
+//                if (!container.containsKey(customer)) {
+//                    container.put(customer, new ArrayList<>());
+//                }
+//
+//                container.get(customer).add(order);
+//            }
+//        });
 
-        orders.forEach((order) -> {
-            String customer = order.customerName();
+        return orders.stream()
+                .filter(
+                        order -> order.status() == Status.CANCELLED &&
+                                order.totalSales() < 100
+                ).collect(
+                        Collectors.groupingBy(
+                                Order::customerName,
+                                Collectors.counting()
+                        ))
+                .entrySet().stream()
+                .filter(entry -> entry.getValue() > 3)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
 
-            if (order.status() == Status.CANCELLED &&
-            order.totalSales() < 100) {
-
-                if (!container.containsKey(customer)) {
-                    container.put(customer, new ArrayList<>());
-                }
-
-                container.get(customer).add(order);
-            }
-        });
-
-        Set<String> susCustomers = new HashSet<>();
-
-        container.forEach((customer, susOrders) -> {
-            if (susOrders.size() >= 3) {
-                susCustomers.add(customer);
-            }
-        });
-
-        return susCustomers;
+//        Set<String> susCustomers = new HashSet<>();
+//
+//        container.forEach((customer, susOrders) -> {
+//            if (susOrders.size() > 3) {
+//                susCustomers.add(customer);
+//            }
+//        });
+//
+//        return susCustomers;
     }
 
     @Override
     public Map<Category, PaymentMethod> mostUsedPaymentMethodForCategory() {
+        Map<Category, Map<PaymentMethod, Integer>> container = new HashMap<>();
 
+        orders.forEach(order -> {
+            Category category = order.category();
+            PaymentMethod paymentMethod = order.paymentMethod();
 
-        return Map.of();
+            if (container.containsKey(category)) {
+                Map<PaymentMethod, Integer> subMap = container.get(category);
+
+                if (subMap.containsKey(paymentMethod)) {
+                    subMap.put(paymentMethod, subMap.get(paymentMethod) + 1);
+                } else {
+                    subMap.put(paymentMethod, 1);
+                }
+
+            } else {
+                container.put(category, new HashMap<>());
+                container.get(category).put(paymentMethod, 1);
+            }
+        });
+
+        Map<Category, PaymentMethod> result = new HashMap<>();
+
+        container.forEach((category, subMap) -> {
+            Optional<Map.Entry<PaymentMethod, Integer>> mostUsedPaymentMethodEntry = subMap.entrySet().stream()
+                    .max(Comparator.comparing(Map.Entry<PaymentMethod, Integer>::getValue).thenComparing(entry -> entry.getKey().name(), Comparator.reverseOrder()));
+
+           PaymentMethod mostUsedPaymentMethod = null;
+
+            if (mostUsedPaymentMethodEntry.isPresent()) {
+                mostUsedPaymentMethod = mostUsedPaymentMethodEntry.get().getKey();
+            }
+
+            result.put(category, mostUsedPaymentMethod);
+        });
+
+        return result;
     }
 
     @Override
@@ -153,8 +202,7 @@ public class OrderAnalyzerImpl implements OrderAnalyzer {
         List<Map.Entry<String, Integer>> sorted = new ArrayList<>(container.entrySet());
 
         sorted.sort(Comparator.comparing(
-                        Map.Entry<String, Integer>::getValue)
-                .reversed()
+                Map.Entry<String, Integer>::getValue, Comparator.reverseOrder())
                 .thenComparing(Map.Entry::getKey));
 
         return sorted.getFirst().getKey();
@@ -179,6 +227,7 @@ public class OrderAnalyzerImpl implements OrderAnalyzer {
 
             } else {
                 result.put(category, new HashMap<>());
+                result.get(category).put(status, 1L);
             }
         });
 

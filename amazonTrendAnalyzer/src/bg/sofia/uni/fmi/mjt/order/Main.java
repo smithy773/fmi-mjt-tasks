@@ -19,5 +19,19 @@ public class Main {
         var analyzer = new OrderAnalyzerImpl(orders);
 
         System.out.println(analyzer.suspiciousCustomers());
+        System.out.println("======================================");
+        System.out.println(analyzer.locationWithMostOrders());
+        System.out.println("======================================");
+        System.out.println(analyzer.groupByCategoryAndStatus());
+        System.out.println("======================================");
+        System.out.println(analyzer.mostUsedPaymentMethodForCategory());
+        System.out.println("======================================");
+        System.out.println(analyzer.topNMostOrderedProducts(1));
+        System.out.println("======================================");
+        System.out.println(analyzer.ordersByCustomer("Chris White"));
+        System.out.println("======================================");
+        System.out.println(analyzer.dateWithMostOrders());
+        System.out.println("======================================");
+        System.out.println(analyzer.revenueByCategory());
     }
 }
