@@ -1,0 +1,101 @@
+Order ID,Date,Product,Category,Price,Quantity,Total Sales,Customer Name,Customer Location,Payment Method,Status
+ORD0001,14-03-25,Running Shoes,Footwear,60,3,180,Emma Clark,New York,Debit Card,Cancelled
+ORD0002,20-03-25,Headphones,Electronics,100,4,400,Emily Johnson,San Francisco,Debit Card,Pending
+ORD0003,15-02-25,Running Shoes,Footwear,60,2,120,John Doe,Denver,Amazon Pay,Cancelled
+ORD0004,19-02-25,Running Shoes,Footwear,60,3,180,Olivia Wilson,Dallas,Credit Card,Pending
+ORD0005,10-03-25,Smartwatch,Electronics,150,3,450,Emma Clark,New York,Debit Card,Pending
+ORD0006,14-03-25,T-Shirt,Clothing,20,1,20,John Doe,Dallas,Credit Card,Pending
+ORD0007,18-03-25,Smartwatch,Electronics,150,4,600,Emma Clark,Houston,PayPal,Completed
+ORD0008,02-03-25,Smartphone,Electronics,500,1,500,Sophia Miller,Miami,PayPal,Completed
+ORD0009,08-03-25,T-Shirt,Clothing,20,3,60,Sophia Miller,Boston,PayPal,Completed
+ORD0010,12-03-25,Smartphone,Electronics,500,1,500,Emily Johnson,San Francisco,Credit Card,Cancelled
+ORD0011,17-02-25,Book,Books,15,2,30,David Lee,Boston,Amazon Pay,Pending
+ORD0012,13-03-25,Jeans,Clothing,40,4,160,Michael Brown,Dallas,Credit Card,Completed
+ORD0013,01-03-25,Laptop,Electronics,800,2,1600,Daniel Harris,San Francisco,Gift Card,Pending
+ORD0014,04-03-25,Washing Machine,Home Appliances,600,3,1800,Michael Brown,Miami,Credit Card,Cancelled
+ORD0015,20-02-25,Smartwatch,Electronics,150,4,600,John Doe,Seattle,Credit Card,Completed
+ORD0016,26-02-25,Refrigerator,Home Appliances,1200,1,1200,John Doe,Boston,Credit Card,Cancelled
+ORD0017,01-04-25,T-Shirt,Clothing,20,1,20,Emma Clark,New York,Amazon Pay,Completed
+ORD0018,10-02-25,Smartphone,Electronics,500,2,1000,Michael Brown,Los Angeles,Amazon Pay,Completed
+ORD0019,22-03-25,Running Shoes,Footwear,60,3,180,Olivia Wilson,Houston,Credit Card,Completed
+ORD0020,07-03-25,Headphones,Electronics,100,4,400,Olivia Wilson,Seattle,Debit Card,Pending
+ORD0021,05-02-25,Headphones,Electronics,100,3,300,Chris White,Miami,Debit Card,Cancelled
+ORD0022,07-03-25,Refrigerator,Home Appliances,1200,4,4800,Olivia Wilson,Houston,Credit Card,Pending
+ORD0023,23-02-25,Book,Books,15,1,15,Emma Clark,Houston,Credit Card,Pending
+ORD0024,24-03-25,Refrigerator,Home Appliances,1200,3,3600,Chris White,Dallas,Credit Card,Cancelled
+ORD0025,02-03-25,Book,Books,15,5,75,Sophia Miller,Seattle,Amazon Pay,Completed
+ORD0026,14-02-25,Washing Machine,Home Appliances,600,1,600,Olivia Wilson,Boston,Debit Card,Cancelled
+ORD0027,07-02-25,T-Shirt,Clothing,20,1,20,Daniel Harris,New York,Amazon Pay,Pending
+ORD0028,03-02-25,Headphones,Electronics,100,1,100,Jane Smith,Chicago,Amazon Pay,Completed
+ORD0029,12-02-25,Smartphone,Electronics,500,1,500,Sophia Miller,Denver,Credit Card,Cancelled
+ORD0030,10-02-25,Washing Machine,Home Appliances,600,3,1800,Emily Johnson,Dallas,Gift Card,Cancelled
+ORD0031,24-03-25,Smartphone,Electronics,500,1,500,John Doe,Houston,Gift Card,Pending
+ORD0032,10-03-25,Smartphone,Electronics,500,4,2000,Michael Brown,Seattle,PayPal,Pending
+ORD0033,04-02-25,Book,Books,15,1,15,Olivia Wilson,New York,Debit Card,Cancelled
+ORD0034,02-04-25,T-Shirt,Clothing,20,5,100,Jane Smith,New York,Credit Card,Pending
+ORD0035,02-04-25,Laptop,Electronics,800,3,2400,Emma Clark,Denver,Amazon Pay,Completed
+ORD0036,09-02-25,Refrigerator,Home Appliances,1200,2,2400,Sophia Miller,Boston,PayPal,Cancelled
+ORD0037,16-02-25,Headphones,Electronics,100,3,300,Michael Brown,New York,Debit Card,Cancelled
+ORD0038,26-03-25,Laptop,Electronics,800,3,2400,Olivia Wilson,Chicago,Amazon Pay,Completed
+ORD0039,02-03-25,Laptop,Electronics,800,2,1600,Olivia Wilson,San Francisco,PayPal,Completed
+ORD0040,26-03-25,Smartwatch,Electronics,150,1,150,Emily Johnson,Seattle,Gift Card,Pending
+ORD0041,20-02-25,Book,Books,15,1,15,Jane Smith,Miami,Credit Card,Cancelled
+ORD0042,17-03-25,Headphones,Electronics,100,3,300,Jane Smith,Chicago,Amazon Pay,Cancelled
+ORD0043,08-02-25,T-Shirt,Clothing,20,4,80,Jane Smith,Denver,Credit Card,Pending
+ORD0044,24-03-25,Smartwatch,Electronics,150,1,150,Chris White,Houston,Debit Card,Pending
+ORD0045,15-03-25,Refrigerator,Home Appliances,1200,3,3600,Daniel Harris,New York,Credit Card,Pending
+ORD0046,06-03-25,Running Shoes,Footwear,60,2,120,David Lee,Houston,Debit Card,Cancelled
+ORD0047,26-03-25,T-Shirt,Clothing,20,2,40,Chris White,Miami,Gift Card,Cancelled
+ORD0048,11-02-25,T-Shirt,Clothing,20,5,100,Jane Smith,Denver,Amazon Pay,Completed
+ORD0049,18-02-25,Smartphone,Electronics,500,4,2000,Emma Clark,Chicago,Debit Card,Completed
+ORD0050,14-03-25,Jeans,Clothing,40,3,120,John Doe,Boston,Gift Card,Completed
+ORD0051,19-02-25,Book,Books,15,1,15,Emma Clark,Houston,Gift Card,Cancelled
+ORD0052,24-02-25,Laptop,Electronics,800,3,2400,John Doe,San Francisco,Credit Card,Pending
+ORD0053,24-03-25,Running Shoes,Footwear,60,4,240,Emily Johnson,Los Angeles,PayPal,Completed
+ORD0054,15-03-25,Smartwatch,Electronics,150,3,450,David Lee,Boston,Gift Card,Pending
+ORD0055,15-03-25,Jeans,Clothing,40,2,80,Sophia Miller,Dallas,PayPal,Completed
+ORD0056,19-03-25,Smartwatch,Electronics,150,2,300,Emma Clark,Dallas,Credit Card,Completed
+ORD0057,15-03-25,Smartphone,Electronics,500,1,500,Jane Smith,Los Angeles,Debit Card,Cancelled
+ORD0058,13-03-25,Smartphone,Electronics,500,1,500,Jane Smith,Chicago,PayPal,Cancelled
+ORD0059,01-04-25,Smartwatch,Electronics,150,2,300,Daniel Harris,Dallas,Credit Card,Cancelled
+ORD0060,12-03-25,Book,Books,15,5,75,Jane Smith,Dallas,Credit Card,Pending
+ORD0061,11-03-25,Refrigerator,Home Appliances,1200,1,1200,Jane Smith,New York,PayPal,Cancelled
+ORD0062,10-02-25,Laptop,Electronics,800,5,4000,Olivia Wilson,San Francisco,PayPal,Completed
+ORD0063,30-03-25,Smartphone,Electronics,500,5,2500,Emma Clark,Miami,Gift Card,Completed
+ORD0064,13-02-25,Refrigerator,Home Appliances,1200,4,4800,Emily Johnson,Denver,PayPal,Pending
+ORD0065,16-03-25,Book,Books,15,3,45,Emma Clark,San Francisco,Amazon Pay,Pending
+ORD0066,14-03-25,Smartwatch,Electronics,150,2,300,Michael Brown,Denver,PayPal,Pending
+ORD0067,31-03-25,Headphones,Electronics,100,3,300,Chris White,New York,Debit Card,Pending
+ORD0068,23-02-25,Headphones,Electronics,100,1,100,David Lee,Houston,Debit Card,Cancelled
+ORD0069,25-02-25,Refrigerator,Home Appliances,1200,4,4800,David Lee,Boston,Gift Card,Pending
+ORD0070,10-03-25,Book,Books,15,1,15,Emily Johnson,Boston,Credit Card,Completed
+ORD0071,16-03-25,Smartwatch,Electronics,150,5,750,John Doe,Denver,Credit Card,Pending
+ORD0072,07-03-25,Laptop,Electronics,800,3,2400,Daniel Harris,Houston,Credit Card,Pending
+ORD0073,20-02-25,Smartphone,Electronics,500,5,2500,Emily Johnson,Miami,Credit Card,Cancelled
+ORD0074,25-03-25,Refrigerator,Home Appliances,1200,4,4800,Jane Smith,Dallas,Gift Card,Cancelled
+ORD0075,26-02-25,Headphones,Electronics,100,2,200,Daniel Harris,Boston,PayPal,Pending
+ORD0076,24-02-25,Washing Machine,Home Appliances,600,1,600,Jane Smith,Dallas,Amazon Pay,Completed
+ORD0077,20-03-25,Headphones,Electronics,100,2,200,Daniel Harris,Houston,Credit Card,Completed
+ORD0078,18-03-25,Smartwatch,Electronics,150,2,300,Emma Clark,Los Angeles,Gift Card,Cancelled
+ORD0079,09-03-25,Running Shoes,Footwear,60,2,120,Emily Johnson,Denver,Gift Card,Cancelled
+ORD0080,23-02-25,Running Shoes,Footwear,60,4,240,Sophia Miller,San Francisco,Debit Card,Pending
+ORD0081,26-02-25,Headphones,Electronics,100,3,300,Michael Brown,Chicago,PayPal,Cancelled
+ORD0082,24-02-25,Smartphone,Electronics,500,3,1500,Jane Smith,Seattle,Debit Card,Cancelled
+ORD0083,28-02-25,Washing Machine,Home Appliances,600,4,2400,Emma Clark,Houston,Gift Card,Cancelled
+ORD0084,14-02-25,T-Shirt,Clothing,20,5,100,Olivia Wilson,Boston,PayPal,Completed
+ORD0085,06-02-25,Smartphone,Electronics,500,5,2500,Michael Brown,Houston,PayPal,Completed
+ORD0086,25-02-25,Smartwatch,Electronics,150,5,750,Jane Smith,Dallas,PayPal,Cancelled
+ORD0087,13-03-25,Running Shoes,Footwear,60,5,300,Emma Clark,Miami,Debit Card,Completed
+ORD0088,06-02-25,Refrigerator,Home Appliances,1200,2,2400,Chris White,Seattle,Debit Card,Pending
+ORD0089,26-03-25,Running Shoes,Footwear,60,5,300,Emma Clark,Los Angeles,Credit Card,Cancelled
+ORD0090,24-03-25,Smartwatch,Electronics,150,5,750,Emily Johnson,Houston,Amazon Pay,Completed
+ORD0091,03-02-25,Laptop,Electronics,800,4,3200,Daniel Harris,Houston,Gift Card,Pending
+ORD0092,15-03-25,Smartphone,Electronics,500,2,1000,Olivia Wilson,Boston,PayPal,Cancelled
+ORD0093,06-03-25,Refrigerator,Home Appliances,1200,5,6000,David Lee,Denver,PayPal,Cancelled
+ORD0094,25-03-25,Jeans,Clothing,40,5,200,Daniel Harris,Seattle,Credit Card,Cancelled
+ORD0095,17-02-25,Smartwatch,Electronics,150,4,600,Chris White,New York,Debit Card,Cancelled
+ORD0096,30-03-25,Smartwatch,Electronics,150,3,450,Jane Smith,New York,Amazon Pay,Completed
+ORD0097,25-03-25,Book,Books,15,5,75,Olivia Wilson,Chicago,Amazon Pay,Pending
+ORD0098,14-02-25,Smartwatch,Electronics,150,2,300,Chris White,Miami,PayPal,Pending
+ORD0099,18-02-25,Washing Machine,Home Appliances,600,5,3000,Michael Brown,Seattle,Debit Card,Completed
+ORD0100,13-02-25,Running Shoes,Footwear,60,1,60,Jane Smith,Houston,Gift Card,Cancelled
